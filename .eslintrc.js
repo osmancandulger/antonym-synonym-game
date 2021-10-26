@@ -20,8 +20,14 @@ module.exports = {
     'dot-notation': 'off',
     'space-before-function-paren': 'off',
     '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-this-alias': 'off',
+    'vue/html-self-closing': 'off',
+    '@typescript-eslint/consistent-type-assertions': 'off',
     '@typescript-eslint/camelcase': 'off',
     'vue/no-use-v-if-with-v-for': 'off',
+    '@typescript-eslint/ban-types': 'off',
   },
   overrides: [
     {
