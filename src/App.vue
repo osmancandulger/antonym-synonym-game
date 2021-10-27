@@ -1,10 +1,11 @@
 <template>
   <div id="container">
     <div class="component">
-      <OptionHeader />
+      <OptionHeader @releaseSelected="setVoice($event)" />
     </div>
     <div class="component">
-      <Game />
+      <div></div>
+      <Game :selectedVoice="selectedVoice" />
     </div>
   </div>
 </template>
@@ -19,7 +20,12 @@ import Game from './components/Game.vue';
     Game,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  selectedVoice: any = null;
+  setVoice(event: any) {
+    this.selectedVoice = event;
+  }
+}
 </script>
 
 <style lang="scss">
