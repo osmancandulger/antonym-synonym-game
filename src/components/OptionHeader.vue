@@ -2,8 +2,10 @@
   <div class="container">
     <h1>Antonym and Synonym Game</h1>
     <label class="label" for="select">Please select a person: </label>
-    <select name="select" id="select" v-model="selectedOption">
-      <option v-for="(item, index) in test" :key="index">{{ item }}</option>
+    <select v-model="selectedVoice" @change="test" name="select" id="select">
+      <option v-for="(item, index) in voicesList" :value="item" :key="index">
+        {{ item.name + item.lang }}
+      </option>
     </select>
   </div>
 </template>
@@ -13,8 +15,25 @@ import { Options, Vue } from 'vue-class-component';
 
 @Options({})
 export default class OptionHeader extends Vue {
-  selectedOption: Object = {};
-  test: String[] = ['1', '2', '3'];
+  selectedVoice: Object = {};
+  voicesList: any = null;
+
+  async mounted() {
+    this.getVoicesList().then(voices => {
+      this.voicesList = voices;
+    });
+  }
+  test() {
+    console.log(this.selectedVoice);
+  }
+
+  async getVoicesList() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(window.speechSynthesis.getVoices());
+      }, 150);
+    });
+  }
 }
 </script>
 

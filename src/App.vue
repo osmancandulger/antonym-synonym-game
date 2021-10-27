@@ -1,13 +1,22 @@
 <template>
-  <OptionHeader />
+  <div id="container">
+    <div class="component">
+      <OptionHeader />
+    </div>
+    <div class="component">
+      <Game />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import OptionHeader from './components/OptionHeader.vue';
+import Game from './components/Game.vue';
 @Options({
   components: {
     OptionHeader,
+    Game,
   },
 })
 export default class App extends Vue {}
@@ -21,5 +30,15 @@ export default class App extends Vue {}
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.component + .component {
+  margin-top: 40px;
 }
 </style>
