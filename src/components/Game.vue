@@ -2,10 +2,21 @@
   <div class="loading" v-if="isReady === false"><h1>Loading..</h1></div>
   <div class="container" v-else>
     <div class="info-header">
-      <div class="score-section">Score:0</div>
-      <div class="time-section">Remaning Time: 00:0{{ countDown }}</div>
+      <div class="score-section">
+        Score: <span>{{ score }}</span>
+      </div>
+      <div class="time-section">
+        <span
+          >Remaning Time:
+          <span class="count-text">00:0{{ countDown }}</span></span
+        >
+      </div>
     </div>
     <div class="interactive-section">
+      <div class="text-wrapper">
+        <h1 class="interactive-text">Word:{{ questionWord }}</h1>
+        <h3 class="interactive-text">Your Answer: {{ text }}</h3>
+      </div>
       <button
         @click.prevent="getRandomWord()"
         :disabled="countDown > 0 && isReady === true"
@@ -13,8 +24,6 @@
       >
         Get Random Word
       </button>
-      <h3>Result: {{ text }}</h3>
-      <h6>Word:{{ questionWord }}</h6>
       <!-- <h6>Synonym:{{ matchedList.synonym }}</h6> -->
     </div>
   </div>
@@ -22,7 +31,7 @@
 
 <script lang="ts">
 import { Vue } from 'vue-class-component';
-import { Prop, PropSync, Watch } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 import env from '@/config/env';
 export default class Game extends Vue {
   @Prop({ required: true }) private selectedVoice: Object | any;
@@ -33,7 +42,9 @@ export default class Game extends Vue {
   word = '';
   questionWord = '';
   countDown: any = 10;
+  score = 0;
   matchedList: any = [];
+  synonymsList: any = [];
   myRecognition: any;
   isReady: any = null;
   isPrepared: Boolean = false;
@@ -45,10 +56,11 @@ export default class Game extends Vue {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     this.myRecognition = new webkitSpeechRecognition();
-    this.myRecognition.lang = 'tr';
+    this.myRecognition.lang = 'en';
     this.myRecognition.onresult = this.text;
   }
   getRandomWord() {
+    this.text = '';
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
       headers: {
@@ -117,6 +129,15 @@ export default class Game extends Vue {
 
   onResult(event: any) {
     this.text = event.results[0][0].transcript;
+    this.setResult();
+  }
+  setResult() {
+    if (this.synonymsList.includes(this.text.toLowerCase())) {
+      this.score += 1;
+      localStorage.setItem('score', `${this.score}`);
+    } else {
+      console.error('error');
+    }
   }
 
   resolveProxy() {
@@ -125,6 +146,8 @@ export default class Game extends Vue {
       const proxy = new Proxy(this.matchedList, handler); // Proxy {name: "Proxy", test: true}
       const originalTarget = JSON.parse(JSON.stringify(proxy)); // {name: 'Proxy', test: true}
       this.questionWord = originalTarget.word;
+      this.synonymsList = originalTarget.synonym;
+      console.log(originalTarget.synonym);
       this.startCountDown();
       return originalTarget;
     }
@@ -150,6 +173,9 @@ export default class Game extends Vue {
 </script>
 <style lang="scss" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   width: 600px;
   height: 350px;
   border: 2px solid aquamarine;
@@ -162,13 +188,44 @@ export default class Game extends Vue {
   .score-section {
     display: flex;
     flex: 1;
+    margin: 5px 10px;
+    font-weight: 500;
+
+    span {
+      font-weight: 600;
+    }
+  }
+  .time-section {
+    margin-top: 5px;
+    margin-right: 10px;
+    font-weight: 500;
+    .count-text {
+      font-weight: 600;
+    }
   }
   .word-container {
     position: relative;
     margin-top: 23%;
   }
   .interactive-section {
-    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 70%;
+    margin-top: 40px;
+
+    .interactive-text + .interactive-text {
+      margin-bottom: 30px;
+    }
+    .text-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      width: 65%;
+    }
   }
   .random-button {
     background: azure;
