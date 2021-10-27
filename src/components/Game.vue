@@ -3,6 +3,7 @@
     <input type="text" v-model="text" />
     <button @click.prevent="this.speakSomeBlaBla(selectedVoice)">Say</button>
     <button @click.prevent="this.speak(selectedVoice)">Speak It</button>
+    <button @click.prevent="getRandomWord()">Get Random Word</button>
     <h3>Result: {{ text }}</h3>
     <div class="info-header">
       <h1 v-if="selectedVoice">
@@ -24,6 +25,8 @@ export default class Game extends Vue {
   synth = window.speechSynthesis;
   voicesList: any = null;
   text = '';
+  word = '';
+  matchedList: any = [];
   myRecognition: any;
   //!TODO: Add speed option and rate
   async mounted() {
@@ -36,6 +39,46 @@ export default class Game extends Vue {
     this.myRecognition.lang = 'tr';
     this.myRecognition.onresult = this.text;
   }
+  getRandomWord() {
+    fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
+        'x-rapidapi-key': '1aadcca70fmshd096ef2dc3f03edp13f023jsn1431dca5c5bd',
+      },
+    }).then(response =>
+      response
+        .json()
+        .then(data => this.getSynonym(data.word))
+        .catch(err => {
+          console.error(err);
+        }),
+    );
+  }
+
+  getSynonym(word: string) {
+    fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
+        'x-rapidapi-key': '1aadcca70fmshd096ef2dc3f03edp13f023jsn1431dca5c5bd',
+      },
+    }).then(response =>
+      response
+        .json()
+        .then(data => {
+          if (data.synonyms.length > 0) {
+            this.matchedList = { synonym: data.synonyms, word: data.word };
+            console.log(this.matchedList);
+          } else {
+            this.getRandomWord();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        }),
+    );
+  }
 
   async getVoicesList() {
     return new Promise(resolve => {
@@ -46,7 +89,6 @@ export default class Game extends Vue {
   }
   speakSomeBlaBla(selected: any) {
     let utterance = new SpeechSynthesisUtterance(this.text);
-    console.log(utterance);
     utterance.voice = selected;
     this.synth.speak(utterance);
   }
