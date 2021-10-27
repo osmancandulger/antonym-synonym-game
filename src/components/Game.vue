@@ -1,18 +1,22 @@
 <template>
-  <div class="container">
-    <input type="text" v-model="text" />
-    <button @click.prevent="this.speakSomeBlaBla(selectedVoice)">Say</button>
-    <button @click.prevent="this.speak(selectedVoice)">Speak It</button>
-    <button @click.prevent="getRandomWord()">Get Random Word</button>
-    <h3>Result: {{ text }}</h3>
+  <div class="loading" v-if="isReady === false"><h1>Loading..</h1></div>
+  <div class="container" v-else>
     <div class="info-header">
-      <h1 v-if="selectedVoice">
-        {{ selectedVoice.name + selectedVoice.lang }}
-      </h1>
       <div class="score-section">Score:0</div>
-      <div class="time-section">00:00</div>
+      <div class="time-section">Remaning Time: 00:0{{ countDown }}</div>
     </div>
-    <div class="word-container">WORD COMES HERE</div>
+    <div class="interactive-section">
+      <button
+        @click.prevent="getRandomWord()"
+        :disabled="countDown > 0 && isReady === true"
+        class="random-button"
+      >
+        Get Random Word
+      </button>
+      <h3>Result: {{ text }}</h3>
+      <h6>Word:{{ questionWord }}</h6>
+      <!-- <h6>Synonym:{{ matchedList.synonym }}</h6> -->
+    </div>
   </div>
 </template>
 
@@ -27,11 +31,14 @@ export default class Game extends Vue {
   voicesList: any = null;
   text = '';
   word = '';
+  questionWord = '';
+  countDown: any = 10;
   matchedList: any = [];
   myRecognition: any;
+  isReady: any = null;
+  isPrepared: Boolean = false;
   //!TODO: Add speed option and rate
   async mounted() {
-    console.log(env);
     this.getVoicesList().then(voices => {
       this.voicesList = voices;
     });
@@ -51,7 +58,10 @@ export default class Game extends Vue {
     }).then(response =>
       response
         .json()
-        .then(data => this.getSynonym(data.word))
+        .then(data => {
+          this.getSynonym(data.word);
+          this.countDown = 10;
+        })
         .catch(err => {
           console.error(err);
         }),
@@ -59,6 +69,7 @@ export default class Game extends Vue {
   }
 
   getSynonym(word: string) {
+    this.isReady = false;
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
       method: 'GET',
       headers: {
@@ -70,8 +81,13 @@ export default class Game extends Vue {
         .json()
         .then(data => {
           if (data.synonyms.length > 0) {
-            this.matchedList = { synonym: data.synonyms, word: data.word };
-            console.log(this.matchedList);
+            this.isReady = true;
+
+            this.matchedList = {
+              synonym: data.synonyms,
+              word: data.word,
+            };
+            this.resolveProxy();
           } else {
             this.getRandomWord();
           }
@@ -89,12 +105,12 @@ export default class Game extends Vue {
       }, 150);
     });
   }
-  speakSomeBlaBla(selected: any) {
-    let utterance = new SpeechSynthesisUtterance(this.text);
+  speakSomeBlaBla(selected: any, text: string) {
+    let utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = selected;
     this.synth.speak(utterance);
   }
-  speak(event: any) {
+  speak() {
     this.myRecognition.start();
     this.myRecognition.onresult = this.onResult;
   }
@@ -103,8 +119,33 @@ export default class Game extends Vue {
     this.text = event.results[0][0].transcript;
   }
 
-  // @Watch('text', { immediate: true, deep: true })
-  // onSelectedChanged() {}
+  resolveProxy() {
+    const handler = {};
+    if (this.isReady) {
+      const proxy = new Proxy(this.matchedList, handler); // Proxy {name: "Proxy", test: true}
+      const originalTarget = JSON.parse(JSON.stringify(proxy)); // {name: 'Proxy', test: true}
+      this.questionWord = originalTarget.word;
+      this.startCountDown();
+      return originalTarget;
+    }
+  }
+  startCountDown() {
+    let intervalID = setInterval(() => {
+      this.countDown -= 1;
+      if (this.countDown === 0) {
+        this.isPrepared = true;
+        clearInterval(intervalID);
+      }
+    }, 1000);
+  }
+
+  @Watch('countDown', { immediate: true, deep: true })
+  async onTimeIsUp() {
+    if (this.isPrepared && this.countDown == 0) {
+      this.speakSomeBlaBla(this.voicesList[41], this.questionWord);
+      this.speak();
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -125,6 +166,26 @@ export default class Game extends Vue {
   .word-container {
     position: relative;
     margin-top: 23%;
+  }
+  .interactive-section {
+    margin-top: 60px;
+  }
+  .random-button {
+    background: azure;
+    outline: none;
+    border: 2px solid #4e4e4e00;
+    width: 150px;
+    height: 35px;
+    border-radius: 35px;
+    box-shadow: 2px 2px 5px rgb(40, 41, 40);
+    transition: transform 0.4s ease-in-out;
+    &:active {
+      transform: scale(0.7);
+    }
+    &:hover {
+      color: rgb(80, 80, 80);
+      cursor: pointer;
+    }
   }
 }
 </style>
