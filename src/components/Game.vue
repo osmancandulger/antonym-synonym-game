@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <input type="text" v-model="text" />
-    <button @click.prevent="this.speakSomeBlaBla(selectedVoice)"></button>
+    <button @click.prevent="this.speakSomeBlaBla(selectedVoice)">Say</button>
+    <button @click.prevent="this.speak(selectedVoice)">Speak It</button>
+    <h3>Result: {{ text }}</h3>
     <div class="info-header">
       <h1 v-if="selectedVoice">
         {{ selectedVoice.name + selectedVoice.lang }}
@@ -22,11 +24,17 @@ export default class Game extends Vue {
   synth = window.speechSynthesis;
   voicesList: any = null;
   text = '';
-
+  myRecognition: any;
+  //!TODO: Add speed option and rate
   async mounted() {
     this.getVoicesList().then(voices => {
       this.voicesList = voices;
     });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    this.myRecognition = new webkitSpeechRecognition();
+    this.myRecognition.lang = 'tr';
+    this.myRecognition.onresult = this.text;
   }
 
   async getVoicesList() {
@@ -38,15 +46,21 @@ export default class Game extends Vue {
   }
   speakSomeBlaBla(selected: any) {
     let utterance = new SpeechSynthesisUtterance(this.text);
+    console.log(utterance);
     utterance.voice = selected;
-
     this.synth.speak(utterance);
   }
+  speak(event: any) {
+    this.myRecognition.start();
+    this.myRecognition.onresult = this.onResult;
+  }
 
-  // @Watch('selectedVoice', { immediate: true, deep: true })
-  // onSelectedChanged() {
-  //   this.speakSomeBlaBla(this.selectedVoice);
-  // }
+  onResult(event: any) {
+    this.text = event.results[0][0].transcript;
+  }
+
+  // @Watch('text', { immediate: true, deep: true })
+  // onSelectedChanged() {}
 }
 </script>
 <style lang="scss" scoped>
