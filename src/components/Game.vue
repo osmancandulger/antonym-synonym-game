@@ -126,7 +126,9 @@ export default class Game extends Vue {
     this.myRecognition.start();
     this.myRecognition.onresult = this.onResult;
   }
-
+  /**
+   * @description Set text by speech
+   */
   onResult(event: any) {
     this.text = event.results[0][0].transcript;
     this.setResult();
