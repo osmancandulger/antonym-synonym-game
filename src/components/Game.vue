@@ -44,7 +44,6 @@ export default class Game extends Vue {
   synth = window.speechSynthesis;
   voicesList: any = null;
   text = '';
-  word = '';
   questionWord = '';
   countDown: any = 10;
   intervalId: any = 0;
