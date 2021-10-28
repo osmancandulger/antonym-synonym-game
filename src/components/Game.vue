@@ -15,7 +15,9 @@
     <div class="interactive-section">
       <div class="text-wrapper">
         <h1 class="interactive-text">Word:{{ questionWord }}</h1>
-        <h3 class="interactive-text">Your Answer: {{ text }}</h3>
+        <h3 class="interactive-text" ref="answerText">
+          Your Answer: {{ text }}
+        </h3>
       </div>
       <button
         @click.prevent="getRandomWord()"
@@ -134,11 +136,21 @@ export default class Game extends Vue {
     this.setResult();
   }
   setResult() {
-    if (this.synonymsList.includes(this.text.toLowerCase())) {
+    let string = this.text.toLowerCase().replace(/ /g, '');
+    let formattedItem: string[] = [];
+    this.synonymsList.forEach((item: any) => {
+      formattedItem.push(item.toLowerCase().replace(/ /g, ''));
+    });
+    if (formattedItem.includes(string)) {
       this.score += 1;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      this.$refs.answerText.style.color = 'green';
       localStorage.setItem('score', `${this.score}`);
     } else {
-      console.error('error');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      this.$refs.answerText.style.color = 'red';
     }
   }
 
@@ -167,8 +179,10 @@ export default class Game extends Vue {
   @Watch('countDown', { immediate: true, deep: true })
   async onTimeIsUp() {
     if (this.isPrepared && this.countDown == 0) {
-      this.speakSomeBlaBla(this.voicesList[41], this.questionWord);
-      this.speak();
+      this.speakSomeBlaBla(this.voicesList[0], this.questionWord);
+      setTimeout(() => {
+        this.speak();
+      }, 750);
     }
   }
 }
