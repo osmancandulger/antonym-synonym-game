@@ -56,6 +56,10 @@ export default class Game extends Vue {
   isReady: any = null;
   isPrepared: Boolean = false;
   //!TODO: Add speed option and rate
+
+  /**
+   * @description Mounted lifecyle hook
+   */
   async mounted() {
     this.getVoicesList().then(voices => {
       this.voicesList = voices;
@@ -66,6 +70,10 @@ export default class Game extends Vue {
     this.myRecognition.lang = 'en';
     this.myRecognition.onresult = this.text;
   }
+
+  /**
+   * @description Get a random word from WordsAPI
+   */
   getRandomWord() {
     clearInterval(this.intervalId);
     this.text = '';
@@ -88,6 +96,10 @@ export default class Game extends Vue {
     );
   }
 
+  /**
+   * @description Get request for Synonym of providen random word
+   * @param {word}:String
+   */
   getSynonym(word: string) {
     this.isReady = false;
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
@@ -118,6 +130,9 @@ export default class Game extends Vue {
     );
   }
 
+  /**
+   * @description Get voice list from speechSynthesis
+   */
   async getVoicesList() {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -125,15 +140,26 @@ export default class Game extends Vue {
       }, 150);
     });
   }
+
+  /**
+   * @description Say providen word from selected voice
+   * @param {selected}:any Selected voice
+   * @param {text}:string text script to say it
+   */
   speakSomeBlaBla(selected: any, text: string) {
     let utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = selected;
     this.synth.speak(utterance);
   }
+
+  /**
+   * @description Start the recognition to get speech result
+   */
   speak() {
     this.myRecognition.start();
     this.myRecognition.onresult = this.onResult;
   }
+
   /**
    * @description Set text by speech
    */
@@ -141,6 +167,9 @@ export default class Game extends Vue {
     this.text = event.results[0][0].transcript;
     this.setResult();
   }
+  /**
+   * @description Set score of answer by voice input
+   */
   setResult() {
     let string = this.text.toLowerCase().replace(/ /g, '');
     let formattedItem: string[] = [];
@@ -160,7 +189,12 @@ export default class Game extends Vue {
     }
   }
 
-  resolveProxy() {
+  /**
+   * @description Resolve Word List as word and synonym
+   * @return {originalTarget}:Object
+   */
+
+  resolveProxy(): any {
     const handler = {};
     if (this.isReady) {
       const proxy = new Proxy(this.matchedList, handler); // Proxy {name: "Proxy", test: true}
@@ -172,6 +206,10 @@ export default class Game extends Vue {
       return originalTarget;
     }
   }
+
+  /**
+   * @description Start Count down after all related arguments to play has been ready
+   */
   startCountDown() {
     let intervalID = setInterval(() => {
       this.countDown -= 1;
@@ -182,7 +220,9 @@ export default class Game extends Vue {
       this.intervalId = intervalID;
     }, 1000);
   }
-
+  /**
+   * @description Say related text and activate speech recognition feature to user
+   */
   @Watch('countDown', { immediate: true, deep: true })
   async onTimeIsUp() {
     if (this.isPrepared && this.countDown == 0) {
