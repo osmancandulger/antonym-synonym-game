@@ -1,35 +1,37 @@
 <template>
-  <div class="loading" v-if="isReady === false"><h1>Loading..</h1></div>
-  <div class="container" v-else>
-    <div class="info-header">
-      <div class="score-section">
-        Score: <span>{{ score }}</span>
+  <div class="container">
+    <div class="loading" v-if="isReady === false"><h1>Loading..</h1></div>
+    <div class="content-wrapper" v-else>
+      <div class="info-header">
+        <div class="score-section">
+          Score: <span>{{ score }}</span>
+        </div>
+        <div class="time-section">
+          <span
+            >Remaning Time:
+            <span class="count-text">00:0{{ countDown }}</span></span
+          >
+        </div>
       </div>
-      <div class="time-section">
-        <span
-          >Remaning Time:
-          <span class="count-text">00:0{{ countDown }}</span></span
+      <div class="interactive-section">
+        <div class="text-wrapper">
+          <h1 class="interactive-text">Word:{{ questionWord }}</h1>
+          <h3 class="interactive-text" ref="answerText">
+            Your Answer: {{ text }}
+          </h3>
+        </div>
+        <button
+          @click.prevent="getRandomWord()"
+          :disabled="countDown > 0 && isReady === true"
+          class="random-button"
         >
+          Get Random Word
+        </button>
+        <button @click.prevent="getRandomWord()" class="random-button">
+          Next Please
+        </button>
+        <!-- <h6>Synonym:{{ matchedList.synonym }}</h6> -->
       </div>
-    </div>
-    <div class="interactive-section">
-      <div class="text-wrapper">
-        <h1 class="interactive-text">Word:{{ questionWord }}</h1>
-        <h3 class="interactive-text" ref="answerText">
-          Your Answer: {{ text }}
-        </h3>
-      </div>
-      <button
-        @click.prevent="getRandomWord()"
-        :disabled="countDown > 0 && isReady === true"
-        class="random-button"
-      >
-        Get Random Word
-      </button>
-      <button @click.prevent="getRandomWord()" class="random-button">
-        Next Please
-      </button>
-      <!-- <h6>Synonym:{{ matchedList.synonym }}</h6> -->
     </div>
   </div>
 </template>
@@ -257,6 +259,7 @@ export default class Game extends Vue {
     border-radius: 35px;
     box-shadow: 2px 2px 5px rgb(40, 41, 40);
     transition: transform 0.4s ease-in-out;
+    margin-top: 15px;
     &:active {
       transform: scale(0.7);
     }
@@ -264,6 +267,12 @@ export default class Game extends Vue {
       color: rgb(80, 80, 80);
       cursor: pointer;
     }
+    & + .random-button {
+      margin-top: 10px;
+    }
+  }
+  .loading {
+    margin-top: 25%;
   }
 }
 </style>
