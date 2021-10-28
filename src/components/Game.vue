@@ -253,11 +253,10 @@ export default class Game extends Vue {
   .random-button {
     background: azure;
     outline: none;
-    border: 2px solid #4e4e4e00;
+    border: 2px solid whitesmoke;
     width: 150px;
     height: 35px;
     border-radius: 35px;
-    box-shadow: 2px 2px 5px rgb(40, 41, 40);
     transition: transform 0.4s ease-in-out;
     margin-top: 15px;
     &:active {
