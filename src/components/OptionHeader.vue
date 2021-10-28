@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>Antonym and Synonym Game</h1>
-    <label class="label" for="select">Please select a person: </label>
+    <!-- <label class="label" for="select">Please select a person: </label>
     <select
       v-model="selectedVoice"
       @change="$emit('releaseSelected', selectedVoice)"
@@ -11,7 +11,7 @@
       <option v-for="(item, index) in voicesList" :value="item" :key="index">
         {{ item.name + item.lang }}
       </option>
-    </select>
+    </select> -->
   </div>
 </template>
 

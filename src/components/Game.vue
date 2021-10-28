@@ -26,6 +26,9 @@
       >
         Get Random Word
       </button>
+      <button @click.prevent="getRandomWord()" class="random-button">
+        Next Please
+      </button>
       <!-- <h6>Synonym:{{ matchedList.synonym }}</h6> -->
     </div>
   </div>
@@ -44,6 +47,7 @@ export default class Game extends Vue {
   word = '';
   questionWord = '';
   countDown: any = 10;
+  intervalId: any = 0;
   score = 0;
   matchedList: any = [];
   synonymsList: any = [];
@@ -62,6 +66,7 @@ export default class Game extends Vue {
     this.myRecognition.onresult = this.text;
   }
   getRandomWord() {
+    clearInterval(this.intervalId);
     this.text = '';
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
@@ -173,6 +178,7 @@ export default class Game extends Vue {
         this.isPrepared = true;
         clearInterval(intervalID);
       }
+      this.intervalId = intervalID;
     }, 1000);
   }
 
