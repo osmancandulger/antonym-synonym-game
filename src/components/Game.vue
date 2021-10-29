@@ -79,7 +79,11 @@ export default class Game extends Vue {
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
       headers: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
         'x-rapidapi-host': env.serviceApi,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
         'x-rapidapi-key': env.apiKey,
       },
     }).then(response =>
@@ -104,7 +108,11 @@ export default class Game extends Vue {
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
       method: 'GET',
       headers: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
         'x-rapidapi-host': env.serviceApi,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
         'x-rapidapi-key': env.apiKey,
       },
     }).then(response =>
