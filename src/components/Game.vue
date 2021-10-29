@@ -81,10 +81,10 @@ export default class Game extends Vue {
       headers: {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        'x-rapidapi-host': serviceApi,
+        'x-rapidapi-host': secrets.serviceApi,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        'x-rapidapi-key': apiKey,
+        'x-rapidapi-key': secrets.apiKey,
       },
     }).then(response =>
       response
@@ -110,10 +110,10 @@ export default class Game extends Vue {
       headers: {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        'x-rapidapi-host': serviceApi,
+        'x-rapidapi-host': secrets.serviceApi,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        'x-rapidapi-key': apiKey,
+        'x-rapidapi-key': secrets.apiKey,
       },
     }).then(response =>
       response
