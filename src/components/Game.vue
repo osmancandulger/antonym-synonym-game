@@ -4,7 +4,12 @@
     <div class="content-wrapper" v-else>
       <div class="info-header">
         <div class="score-section">
-          Score: <span>{{ score }}</span>
+          <div>
+            Score: <span>{{ score }}</span>
+          </div>
+          <div>
+            Failed: <span>{{ failedScore }}</span>
+          </div>
         </div>
         <div class="time-section">
           <span
@@ -47,9 +52,10 @@ export default class Game extends Vue {
   voicesList: any = null;
   text = '';
   questionWord = '';
-  countDown: any = 10;
+  countDown: any = 5;
   intervalId: any = 0;
   score = 0;
+  failedScore = 0;
   matchedList: any = [];
   synonymsList: any = [];
   myRecognition: any;
@@ -65,7 +71,7 @@ export default class Game extends Vue {
       this.voicesList = voices;
     });
     if (localStorage.getItem('score')) {
-      this.score = Number(localStorage.getItem('score'));
+      this.failedScore = Number(localStorage.getItem('failedScore'));
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
@@ -91,7 +97,7 @@ export default class Game extends Vue {
         .json()
         .then(data => {
           this.getSynonym(data.word);
-          this.countDown = 10;
+          this.countDown = 5;
         })
         .catch(err => {
           console.error(err);
@@ -189,6 +195,8 @@ export default class Game extends Vue {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       this.$refs.answerText.style.color = 'red';
+      this.failedScore += 1;
+      localStorage.setItem('failedScore', `${this.failedScore}`);
     }
   }
 
@@ -259,6 +267,9 @@ export default class Game extends Vue {
 
     span {
       font-weight: 600;
+    }
+    div + div {
+      margin-left: 5px;
     }
   }
   .time-section {
