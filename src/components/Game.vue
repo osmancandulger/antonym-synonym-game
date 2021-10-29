@@ -104,8 +104,8 @@ export default class Game extends Vue {
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': env.serviceApi,
-        'x-rapidapi-key': env.apiKey,
+        'x-rapidapi-host': serviceApi,
+        'x-rapidapi-key': apiKey,
       },
     }).then(response =>
       response
