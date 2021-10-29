@@ -39,6 +39,7 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
+import env from '@/../env';
 export default class Game extends Vue {
   @Prop({ required: true }) private selectedVoice: Object | any;
 
@@ -79,12 +80,8 @@ export default class Game extends Vue {
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
       headers: {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        'x-rapidapi-host': serviceApi,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        'x-rapidapi-key': apiKey,
+        'x-rapidapi-host': env.serviceApi,
+        'x-rapidapi-key': env.apiKey,
       },
     }).then(response =>
       response
@@ -108,12 +105,8 @@ export default class Game extends Vue {
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
       method: 'GET',
       headers: {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        'x-rapidapi-host': serviceApi,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        'x-rapidapi-key': apiKey,
+        'x-rapidapi-host': env.serviceApi,
+        'x-rapidapi-key': env.apiKey,
       },
     }).then(response =>
       response
