@@ -64,6 +64,9 @@ export default class Game extends Vue {
     this.getVoicesList().then(voices => {
       this.voicesList = voices;
     });
+    if (localStorage.getItem('score')) {
+      this.score = Number(localStorage.getItem('score'));
+    }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     this.myRecognition = new webkitSpeechRecognition();
