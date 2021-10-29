@@ -78,6 +78,12 @@ export default class Game extends Vue {
     if (localStorage.getItem('score')) {
       this.failedScore = Number(localStorage.getItem('failedScore'));
     }
+    this.setRecognition();
+  }
+  /**
+   * @description Set SpeechRecognition values
+   */
+  setRecognition() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     this.myRecognition = new webkitSpeechRecognition();
