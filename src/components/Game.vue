@@ -75,9 +75,12 @@ export default class Game extends Vue {
     this.getVoicesList().then(voices => {
       this.voicesList = voices;
     });
-    if (localStorage.getItem('score')) {
+    if (localStorage.getItem('score'))
+      this.score = Number(localStorage.getItem('score'));
+
+    if (localStorage.getItem('failedScore'))
       this.failedScore = Number(localStorage.getItem('failedScore'));
-    }
+
     this.setRecognition();
   }
   /**
