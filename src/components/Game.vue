@@ -39,7 +39,7 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import env from '@/config/env';
+import env from 'env';
 export default class Game extends Vue {
   @Prop({ required: true }) private selectedVoice: Object | any;
 
