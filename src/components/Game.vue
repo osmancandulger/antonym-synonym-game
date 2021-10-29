@@ -39,7 +39,6 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import env from '@/../env';
 export default class Game extends Vue {
   @Prop({ required: true }) private selectedVoice: Object | any;
 
@@ -80,8 +79,8 @@ export default class Game extends Vue {
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': env.serviceApi,
-        'x-rapidapi-key': env.apiKey,
+        'x-rapidapi-host': serviceApi,
+        'x-rapidapi-key': apiKey,
       },
     }).then(response =>
       response
