@@ -24,18 +24,22 @@
           <h3 class="interactive-text" ref="answerText">
             Your Answer: {{ text }}
           </h3>
+          <p v-if="matchedList.synonym && !isAnswerCorrect && this.text">
+            Synonyms:{{ matchedList.synonym.join() }}
+          </p>
         </div>
-        <button
-          @click.prevent="getRandomWord()"
-          :disabled="countDown > 0 && isReady === true"
-          class="random-button"
-        >
-          Get Random Word
-        </button>
-        <button @click.prevent="getRandomWord()" class="random-button">
-          Next Please
-        </button>
-        <!-- <h6>Synonym:{{ matchedList.synonym }}</h6> -->
+        <div class="button-wrapper">
+          <button
+            @click.prevent="getRandomWord()"
+            :disabled="countDown > 0 && isReady === true"
+            class="random-button"
+          >
+            Get Random Word
+          </button>
+          <button @click.prevent="getRandomWord()" class="random-button">
+            Next Please
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -61,6 +65,7 @@ export default class Game extends Vue {
   myRecognition: any;
   isReady: any = null;
   isPrepared: Boolean = false;
+  isAnswerCorrect: Boolean = false;
   //!TODO: Add speed option and rate
 
   /**
@@ -190,12 +195,14 @@ export default class Game extends Vue {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       this.$refs.answerText.style.color = 'green';
+      this.isAnswerCorrect = true;
       localStorage.setItem('score', `${this.score}`);
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       this.$refs.answerText.style.color = 'red';
       this.failedScore += 1;
+      this.isAnswerCorrect = false;
       localStorage.setItem('failedScore', `${this.failedScore}`);
     }
   }
@@ -251,7 +258,7 @@ export default class Game extends Vue {
   flex-direction: column;
   position: relative;
   width: 600px;
-  height: 350px;
+  height: 380px;
   border: 2px solid aquamarine;
   border-radius: 6px;
   .info-header {
@@ -292,7 +299,6 @@ export default class Game extends Vue {
     width: 100%;
     height: 70%;
     margin-top: 40px;
-
     .interactive-text + .interactive-text {
       margin-bottom: 30px;
     }
@@ -304,24 +310,29 @@ export default class Game extends Vue {
       width: 65%;
     }
   }
-  .random-button {
-    background: azure;
-    outline: none;
-    border: 2px solid whitesmoke;
-    width: 150px;
-    height: 35px;
-    border-radius: 35px;
-    transition: transform 0.4s ease-in-out;
-    margin-top: 15px;
-    &:active {
-      transform: scale(0.7);
-    }
-    &:hover {
-      color: rgb(80, 80, 80);
-      cursor: pointer;
-    }
-    & + .random-button {
-      margin-top: 10px;
+  .button-wrapper {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    bottom: 10px;
+    .random-button {
+      background: azure;
+      outline: none;
+      border: 2px solid whitesmoke;
+      width: 150px;
+      height: 35px;
+      border-radius: 35px;
+      transition: transform 0.4s ease-in-out;
+      &:active {
+        transform: scale(0.7);
+      }
+      &:hover {
+        color: rgb(80, 80, 80);
+        cursor: pointer;
+      }
+      & + .random-button {
+        margin-top: 10px;
+      }
     }
   }
   .loading {
