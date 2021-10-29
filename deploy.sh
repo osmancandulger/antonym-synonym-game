@@ -10,5 +10,5 @@ cd dist
 git init
 git add -A
 git commit -m 'deploy'
-git push -f git@github.com:osmancandulger/antonym-synonym-game.git master:gh-pages
+git push -f https://github.com/osmancandulger/antonym-synonym-game.git master:gh-pages
 cd -
