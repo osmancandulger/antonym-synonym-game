@@ -61,7 +61,6 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-require('dotenv').config({ path: '@/.env' });
 export default class Game extends Vue {
   @Prop({ required: true }) private selectedVoice: Object | any;
 
@@ -89,8 +88,6 @@ export default class Game extends Vue {
     this.getVoicesList().then(voices => {
       this.voicesList = voices;
     });
-    console.log(process.env);
-    console.log(process);
     if (localStorage.getItem('score'))
       this.score = Number(localStorage.getItem('score'));
 
@@ -120,8 +117,8 @@ export default class Game extends Vue {
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': process.env.SERVICE_API,
-        'x-rapidapi-key': process.env.API_KEY,
+        'x-rapidapi-host': process.env.VUE_APP_SERVICE_API,
+        'x-rapidapi-key': process.env.VUE_APP_API_KEY,
       },
     }).then(response =>
       response
@@ -145,8 +142,8 @@ export default class Game extends Vue {
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': process.env.SERVICE_API,
-        'x-rapidapi-key': process.env.API_KEY,
+        'x-rapidapi-host': process.env.VUE_APP_SERVICE_API,
+        'x-rapidapi-key': process.env.VUE_APP_API_KEY,
       },
     }).then(response =>
       response
