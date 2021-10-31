@@ -61,7 +61,7 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import env from '@/../env';
+require('dotenv').config();
 export default class Game extends Vue {
   @Prop({ required: true }) private selectedVoice: Object | any;
 
@@ -96,6 +96,7 @@ export default class Game extends Vue {
       this.failedScore = Number(localStorage.getItem('failedScore'));
 
     this.setRecognition();
+    console.log(process.env);
   }
   /**
    * @description Set SpeechRecognition values
@@ -118,8 +119,8 @@ export default class Game extends Vue {
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': env.serviceApi,
-        'x-rapidapi-key': env.apiKey,
+        'x-rapidapi-host': process.env.SERVICE_API,
+        'x-rapidapi-key': process.env.apiKey,
       },
     }).then(response =>
       response
@@ -143,8 +144,8 @@ export default class Game extends Vue {
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': env.serviceApi,
-        'x-rapidapi-key': env.apiKey,
+        'x-rapidapi-host': process.env.SERVICE_API,
+        'x-rapidapi-key': process.env.API_KEY,
       },
     }).then(response =>
       response
