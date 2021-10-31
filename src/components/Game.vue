@@ -30,12 +30,27 @@
         </div>
         <div class="button-wrapper">
           <button
+            v-if="countDown > 0 && isReady === null && !inProgress"
             @click.prevent="getRandomWord()"
-            :disabled="countDown > 0 && isReady === true"
             class="random-button"
           >
             Get Random Word
           </button>
+          <div v-else class="mic-wrapper">
+            <img
+              v-if="!inProgress"
+              src="../assets/microphone.png"
+              alt="microphone"
+              class="mic-icon"
+              @click="
+                {
+                  !text ? speak() : '';
+                  !text ? (inProgress = true) : '';
+                }
+              "
+            />
+            <div v-else class="loading-spinner"></div>
+          </div>
           <button @click.prevent="getRandomWord()" class="random-button">
             Next Please
           </button>
@@ -66,6 +81,7 @@ export default class Game extends Vue {
   isReady: any = null;
   isPrepared: Boolean = false;
   isAnswerCorrect: Boolean = false;
+  inProgress: Boolean = false;
   //!TODO: Add speed option and rate
 
   /**
@@ -100,6 +116,7 @@ export default class Game extends Vue {
   getRandomWord() {
     clearInterval(this.intervalId);
     this.text = '';
+    this.inProgress = false;
     fetch('https://wordsapiv1.p.rapidapi.com/words/?random=true', {
       method: 'GET',
       headers: {
@@ -181,13 +198,22 @@ export default class Game extends Vue {
   speak() {
     this.myRecognition.start();
     this.myRecognition.onresult = this.onResult;
+    this.myRecognition.onspeechend = this.onSpeechEnd;
   }
-
+  /**
+   * @desction Toggle inProgress when speech ended
+   */
+  onSpeechEnd() {
+    this.inProgress = false;
+  }
   /**
    * @description Set text by speech
    */
   onResult(event: any) {
     this.text = event.results[0][0].transcript;
+    if (this.text) {
+      this.inProgress = false;
+    }
     this.setResult();
   }
   /**
@@ -254,9 +280,6 @@ export default class Game extends Vue {
   async onTimeIsUp() {
     if (this.isPrepared && this.countDown == 0) {
       this.speakSomeBlaBla(this.voicesList[0], this.questionWord);
-      setTimeout(() => {
-        this.speak();
-      }, 750);
     }
   }
 }
@@ -323,6 +346,7 @@ export default class Game extends Vue {
     display: flex;
     position: absolute;
     flex-direction: column;
+    align-items: center;
     bottom: 10px;
     .random-button {
       background: azure;
@@ -343,9 +367,48 @@ export default class Game extends Vue {
         margin-top: 10px;
       }
     }
+    .mic-icon {
+      position: absolute;
+      bottom: 50px;
+      transition: transform 0.3s ease-in;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.1);
+      }
+      &:active {
+        transform: scale(0.85);
+      }
+    }
   }
   .loading {
     margin-top: 25%;
+  }
+  .mic-icon {
+    width: 35px;
+    height: 35px;
+  }
+  .mic-wrapper {
+    display: flex;
+    justify-content: center;
+    width: max-content;
+    .loading-spinner {
+      position: relative;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      border: 10px solid #f3f3f3;
+      border-top: 10px solid rgb(255, 209, 209);
+      animation: spin 0.4s linear infinite;
+      bottom: 15px;
+    }
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 }
 </style>
