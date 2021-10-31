@@ -119,7 +119,7 @@ export default class Game extends Vue {
       method: 'GET',
       headers: {
         'x-rapidapi-host': process.env.SERVICE_API,
-        'x-rapidapi-key': process.env.apiKey,
+        'x-rapidapi-key': process.env.API_KEY,
       },
     }).then(response =>
       response
