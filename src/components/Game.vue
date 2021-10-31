@@ -25,7 +25,7 @@
             Your Answer: {{ text }}
           </h3>
           <p v-if="matchedList.synonym && !isAnswerCorrect && this.text">
-            Synonyms:{{ matchedList.synonym.join() }}
+            Synonyms:{{ matchedList.synonym.slice(0, 5).join() }}
           </p>
         </div>
         <div class="button-wrapper">
