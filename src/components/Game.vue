@@ -93,7 +93,6 @@ export default class Game extends Vue {
 
     if (localStorage.getItem('failedScore'))
       this.failedScore = Number(localStorage.getItem('failedScore'));
-
     this.setRecognition();
   }
   /**
@@ -193,6 +192,8 @@ export default class Game extends Vue {
    * @description Start the recognition to get speech result
    */
   speak() {
+    console.log(this.matchedList.synonym);
+
     this.myRecognition.start();
     this.myRecognition.onresult = this.onResult;
     this.myRecognition.onspeechend = this.onSpeechEnd;
