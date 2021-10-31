@@ -43,10 +43,8 @@
               alt="microphone"
               class="mic-icon"
               @click="
-                {
-                  !text ? speak() : '';
-                  !text ? (inProgress = true) : '';
-                }
+                !text ? speak() : '';
+                !text ? (inProgress = true) : '';
               "
             />
             <div v-else class="loading-spinner"></div>
