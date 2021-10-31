@@ -251,7 +251,6 @@ export default class Game extends Vue {
       const originalTarget = JSON.parse(JSON.stringify(proxy)); // {name: 'Proxy', test: true}
       this.questionWord = originalTarget.word;
       this.synonymsList = originalTarget.synonym;
-      console.log(originalTarget.synonym);
       this.startCountDown();
       return originalTarget;
     }
