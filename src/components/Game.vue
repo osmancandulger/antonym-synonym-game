@@ -88,6 +88,8 @@ export default class Game extends Vue {
     this.getVoicesList().then(voices => {
       this.voicesList = voices;
     });
+    console.log(process.env);
+    console.log(process);
     if (localStorage.getItem('score'))
       this.score = Number(localStorage.getItem('score'));
 
