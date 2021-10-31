@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,7 +27,8 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo ${{secrets.SERVICE_API}}
+        run: |
+          echo ${{SERVICE_API}}
         env:
           SERVICE_API: ${{secrets.SERVICE_API}}
           API_KEY: ${{secrets.API_KEY}}
