@@ -61,6 +61,7 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
+require('dotenv').config({ path: './.env' });
 export default class Game extends Vue {
   @Prop({ required: true }) private selectedVoice: Object | any;
 
