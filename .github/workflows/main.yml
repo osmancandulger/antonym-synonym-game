@@ -32,4 +32,5 @@ jobs:
           SERVICE_API: ${{secrets.SERVICE_API}}
           API_KEY: ${{secrets.API_KEY}}
       - name: Run ENVS
-        run: echo ${{env.API_KEY}}
+        run: example-command "$env:SUPER_SECRET"
+
