@@ -31,5 +31,3 @@ jobs:
         env:
           SERVICE_API: ${{secrets.SERVICE_API}}
           API_KEY: ${{secrets.API_KEY}}
-      
-
