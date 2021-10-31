@@ -96,7 +96,6 @@ export default class Game extends Vue {
       this.failedScore = Number(localStorage.getItem('failedScore'));
 
     this.setRecognition();
-    console.log(process.env);
   }
   /**
    * @description Set SpeechRecognition values
