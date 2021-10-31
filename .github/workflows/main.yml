@@ -29,5 +29,5 @@ jobs:
       - name: Run a one-line script
         run: echo $SERVICE_API
         env:
-          SERVICE_API: ${{SERVICE_API}}
-          API_KEY: ${{API_KEY}}
+          SERVICE_API: ${{secrets.SERVICE_API}}
+          API_KEY: ${{secrets.API_KEY}}
