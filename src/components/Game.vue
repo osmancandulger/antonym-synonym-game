@@ -287,7 +287,7 @@ export default class Game extends Vue {
   flex-direction: column;
   position: relative;
   width: 600px;
-  height: 380px;
+  height: 410px;
   border: 2px solid aquamarine;
   border-radius: 6px;
   .info-header {
@@ -406,6 +406,18 @@ export default class Game extends Vue {
     100% {
       transform: rotate(360deg);
     }
+  }
+}
+/* Portrait and Landscape */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  .container {
+    width: 100%;
+  }
+}
+/* Portrait and Landscape */
+@media only screen and (min-width: 480px) and (max-width: 700px) {
+  .container {
+    width: 485px;
   }
 }
 </style>
