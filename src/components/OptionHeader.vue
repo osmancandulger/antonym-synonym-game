@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1>Synonym &amp; Meaning Game</h1>
     <!-- <label class="label" for="select">Please select a person: </label>
     <select
       v-model="selectedVoice"

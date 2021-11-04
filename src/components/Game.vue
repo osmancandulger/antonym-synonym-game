@@ -283,6 +283,7 @@ export default class Game extends Vue {
 </script>
 <style lang="scss" scoped>
 .container {
+  font-family: 'New Super Mario Font U', Avenir, Helvetica, Arial, sans-serif;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -338,6 +339,10 @@ export default class Game extends Vue {
       position: relative;
       width: 65%;
     }
+  }
+  button {
+    font-family: 'New Super Mario Font U', Avenir;
+    color: rgb(99, 99, 99);
   }
   .button-wrapper {
     display: flex;
